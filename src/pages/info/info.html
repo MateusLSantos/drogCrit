@@ -1,0 +1,452 @@
+<!--
+  Generated template for the InfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <!-- FAB -->
+
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="turnBack()">
+      <ion-icon name="arrow-round-back"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <!-- Fentanil -->
+
+  <ion-list *ngIf='droga == "fentanil"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 50 mcg/ml<br><br>
+      <b>Dose para indução:</b> 3 mcg/kg (de peso magro) EV<br><br>
+      <b>Dose para manutenção:</b> 0,7 a 10 mcg/kg/h<br><br>
+      <b>Início de ação:</b> 1 a 2 min (pico aos 3 min)<br><br>
+      <b>Duração:</b> 30 a 60 min<br><br>
+      <b>Tempo de injeção:</b> 30 a 60 segundos<br><br>
+      <b>Antídoto:</b> Naloxone 0,4 a 2 mg EV, a cada 2-3 minutos, até obter resposta adequada ou dose de 10 mg
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Opióde 100x mais potente que a morfina, com menor depressão miocárdica e menor liberação de histamina. Atua
+        promovendo analgesia intensa e inibindo a resposta simpática a estímulos dolorosos (da laringoscopia e da
+        própria
+        cânula orotraqueal).</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Principais Indicações</b>
+      <p style='padding-left: 15px'>-Síndrome coronariana aguda</p>
+      <p style='padding-left: 15px'>-Dissecção aguda de aorta</p>
+      <p style='padding-left: 15px'>-Hipertensão intracraniana ou sangramento no SN</p>
+    </ion-item>
+    <ion-item text-wrap>
+      Utilizar com <b style='color:red'>cuidado</b> em pacientes <b>hipotensos</b>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos indesejados</b>
+      <p style='padding-left: 15px'>-Depressão respiratória</p>
+      <p style='padding-left: 15px'>-Rigidez torácica – efeito mais associado à injeção rápida e a altas doses</p>
+    </ion-item>
+  </ion-list>
+
+  <!--LIDOCAÍNA-->
+
+  <ion-list *ngIf='droga == "lidocaina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 20 mg/ml (2%) - ampola com 10 ml<br><br>
+      <b>Dose:</b> 1,5 mg/kg EV<br><br>
+      <b>Início de ação:</b> 45 a 50 segundos<br><br>
+      <b>Duração:</b> 10 a 20 min<br><br>
+      <b>Tempo de injeção:</b> 1 a 2 minutos
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Principais Indicações</b>
+      <p style='padding-left: 15px'>-Broncoespasmo</p>
+      <p style='padding-left: 15px'>-Hipertensão intracraniana</p>
+    </ion-item>
+  </ion-list>
+
+  <!--ETOMIDATO-->
+  <ion-list *ngIf='droga == "etomidato"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 2 mg/ml<br><br>
+      <b>Dose:</b> 0,3 mg/kg EV<br><br>
+      <b>Início de ação:</b> 15 a 45 seg<br><br>
+      <b>Duração:</b> 3 a 12 min<br><br>
+      <b>Administração:</b> Diluir 1:1 em AD e injetar lentamente
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Derivado imidazólico GABAérgico, o mais cardioestável entre os indutores hipnóticos para a intubação de
+        sequência rápida.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Principais Indicações</b>
+      <p style='padding-left: 15px'>-Instabilidade hemodinâmica</p>
+      <p style='padding-left: 15px'>-Hipertensão intracraniana</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos adversos</b>
+      <p style='padding-left: 15px'>-Redução do limiar convulsivo</p>
+      <p style='padding-left: 15px'>-Mioclonias – mais comum caso injeção rápida</p>
+      <p style='padding-left: 15px'>-Supressão adrenocortical (hipogicemia, hiponatremia e hipocalemia), pela
+        inibição reversível da enzima 11-beta-hidroxilase, que pode durar até 72h</p>
+    </ion-item>
+  </ion-list>
+
+  <!--QUETAMINA-->
+
+  <ion-list *ngIf='droga == "quetamina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 50 mg/ml - ampola de 10 ml<br><br>
+      <b>Dose:</b> 1-2 mg/kg (de peso ideal) EV ou 4-6 mg/kg IM<br><br>
+      <b>Início de ação:</b> 30 a 45 seg (4 minutos se via IM)<br><br>
+      <b>Duração:</b> 10 a 20 min
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Derivado da fenciclidina, age antagonizando receptores NMDA de Glutamato, provocando analgesia e hipnose
+        simultaneamente, além de ter efeito simpatomimético.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Efeitos Sistêmicos</b>
+      <p style='padding-left: 15px'>-Neurológicos: aumento do metabolismo e da PIC</p>
+      <p style='padding-left: 15px'>-Respiratório: apneia, perda dos reflexos de proteção, broncodilatação, aumenta
+        secreção</p>
+      <p style='padding-left: 15px'>-Cardiovasculares: efeito cardiodepressor é inibido pela liberação de
+        catecolaminas, aumentando o consumo de O2</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Principais Indicações</b>
+      <p style='padding-left: 15px'>-Broncoespasmo</p>
+      <p style='padding-left: 15px'>-Instabilidade hemodinâmica (hipotensão e/ou hipovolemia)</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações</b>
+      <p style='padding-left: 15px'>-Isquemia miocárdica</p>
+      <p style='padding-left: 15px'>-Emergências hipertensivas</p>
+      <p style='padding-left: 15px'>-Psicose (contraindicação relativa)</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos Adversos*</b>
+      <p style='padding-left: 15px'>-Nistagmo persistente, com movimentos sem coordenação durante a infusão</p>
+      <p style='padding-left: 15px'>-Laringoespasmo</p>
+      <p style='padding-left: 15px'>-Psicose</p>
+      <p style='padding-left: 15px'>-Vômitos</p><br><br>
+      <p style='padding-left: 5px'>*Podem ser reduzidos com a administração de midazolam 0,05 mg/kg antes da
+        administração da cetamina</p>
+    </ion-item>
+  </ion-list>
+
+  <!--PROPOFOL-->
+  <ion-list *ngIf='droga == "propofol"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 10 mg/ml<br><br>
+      <b>Dose para indução:</b> 1,5 mg/kg (de peso magro) EV<br><br>
+      <b>Dose de manutenção:</b> 10 a 80mcg/kg/min EV<br><br>
+      <b>Início de ação:</b> 15 a 45 segundos<br><br>
+      <b>Duração:</b> 1 a 3 minutos<br><br>
+      <b>Diluição:</b> Nenhuma, infundir puro<br><br>
+      <b>Concentrações disponíveis:</b> 1% (ampola de 20ml, FA de 50 e 100 ml) e 2% (seringa com 50 ml)
+
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>É um derivado alquilfenol (álcool). Tem efeito GABAérgico, agindo como venodilatador, anticonvulsivante e
+        antiemético.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Broncoespasmo</p>
+      <p style='padding-left: 15px'>-Afecção neurológica aguda </p>
+      <p style='padding-left: 15px'>-Estado epiléptico</p>
+      <p style='padding-left: 15px'>-Gestantes</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações</b>
+      <p style='padding-left: 15px'>-Hipovolemia</p>
+      <p style='padding-left: 15px'>-Depressão miocárdica</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos adversos</b>
+      <p style='padding-left: 15px'>-Depressão miocárdica importante</p>
+      <p style='padding-left: 15px'>-Depressão respiratória e apneia dose-dependente</p>
+      <p style='padding-left: 15px'>-Síndrome de infusão de propofol (acidose metabólica + insuficiência renal +
+        rabdomiólise) – ocorre principalmente em caso de doses elevadas(>4mg/kg/h) e uso prolongado(>48h)</p>
+      <p style='padding-left: 15px'>-Requer emulsificação lipídica - risco de contaminação se aberto > 6h</p>
+    </ion-item>
+  </ion-list>
+
+  <!--MIDAZOLAM-->
+  <ion-list *ngIf='droga == "midazolam"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 5 mg/ml<br><br>
+      <b>Dose para indução:</b> 0,1 a 0,3 mg/kg (de peso ideal) EV<br><br>
+      <b>Dose de manutenção:</b> 3 a 5 mcg/kg/min<br><br>
+      <b>Início de ação:</b> 60 a 90 segundos<br><br>
+      <b>Duração:</b> 15 a 30 minutos <br><br>
+      <b>Antídoto:</b> Flumazenil 0,2 mcg a cada minuto até efeito desejado ou até acumular 2 mg<br><br>
+      <b>Concentrações disponíveis:</b> 5 mg/ml (ampolas com 3 e 10 ml) ou 1 mg/ml (ampola com 5 ml)
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Benzodiazepínico com ação amnésica, sedativa e hipnótica, porém sem ação analgésica. O efeito se dá de acordo
+        com a dose. Doses menores que 0,1 mg/kg causam sedação leve. O aumento progressivo da dose gera,
+        respectivamente,
+        ansiólise, amnésia e então hipnose.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Principais indicações</b>
+      <p style='padding-left: 15px'>-Paciente epiléptico hemodinamicamente estável</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações</b>
+      <p style='padding-left: 15px'>-Instabilidade hemodinâmica</p>
+      <p style='padding-left: 15px'>-Depressão miocárdica</p>
+    </ion-item>
+  </ion-list>
+
+  <!--SUCCINILCOLINA-->
+  <ion-list *ngIf='droga == "succinilcolina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> Frasco-ampola com 100 mg<br><br>
+      <b>Dose:</b> 1,5 mg/kg<br><br>
+      <b>Início de ação:</b> 30 a 45 segundos<br><br>
+      <b>Duração:</b> 4 a 10 min <br><br>
+      <b>Diluição:</b> 100 mg em 10 ml de AD
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Bloqueador neuromuscular despolarizante, o que leva à fasciculação (sem importância clínica), e risco de
+        hipercalemia (relevante se condições de risco). É frequente o receio em usar bloqueador neuromuscular na IOT,
+        porém, ele é a pedra angular na intubação de sequência rápida, o que permite melhores condições do ato, maior
+        percentagem de intubação correta na primeira tentativa, além de minimizar os riscos do procedimento.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações</b>
+      <p style='padding-left: 15px'>-Hipercalemia documentada (ou ECG sugestivo)</p>
+      <p style='padding-left: 15px'>-Rabdomiólise</p>
+      <p style='padding-left: 15px'>-História familiar ou pessoal de hipertermia maligna</p>
+      <p style='padding-left: 15px'>-Distrofia muscular e miopatias hereditárias</p>
+      <p style='padding-left: 15px'>-Doença neuromuscular que envolva denervação: esclerose múltipla, esclerose lateral
+        amiotrófica</p>
+      <p style='padding-left: 15px'>-Após 72h de um evento: AVE, queimadura extensa, trauma raquimedular, vítima de
+        esmagamento, tétano, botulismo,
+        imobilização prolongada</p>
+    </ion-item>
+  </ion-list>
+
+  <!--ROCURONIO-->
+  <ion-list *ngIf='droga == "rocuronio"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 10 mg/ml<br><br>
+      <b>Dose:</b> 1,0 mg/kg (de peso ideal) EV<br><br>
+      <b>Início de ação:</b> 45 a 60 segundos<br><br>
+      <b>Duração:</b> 30 a 45 min
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Bloqueador neuromuscular não-despolarizante (antagonista competitivo da acetilcolina). É a droga de escolha se
+        houver contraindicação à succinilcolina ou no paciente com risco de evoluir com hipercalemia.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações</b>
+      <p style='padding-left: 15px'>-Hipersensibilidade à droga</p>
+    </ion-item>
+  </ion-list>
+
+  <!------------------------------------------------------------------------------------>
+  <!-------------------------------------DROGAS VASOATIVAS----------------------------------->
+  <!------------------------------------------------------------------------------------>
+
+  <!--NORADRENALINA-->
+  <ion-list *ngIf='droga == "noradrenalina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 1 mg/ml ou 4 mg/ml<br><br>
+      <b>Dose inicial:</b> 5 a 10 mcg/min<br><br>
+      <b>Dose máxima</b> 2mcg/kg/min (cerca de 100 a 150 mcg/min)
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Aumentar a infusão a cada 2 a 5 min, conforme avaliação clínica (PAM, diurese, perfusão periférica, etc) e/ou
+        ultrassom POC.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Primeira escolha para elevar a PAM em paciente que não responde a cristaloide</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos Adversos</b>
+      <p style='padding-left: 15px'>-Taquiarritmia</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Diagnósticos refratários à droga</b>
+      <p style='padding-left: 15px'>-Hipovolemia</p>
+      <p style='padding-left: 15px'>-Problema de infusão (BIC, acesso ou medicação)</p>
+      <p style='padding-left: 15px'>-Pneumotórax ou Hemotórax</p>
+      <p style='padding-left: 15px'>-Insuficiência adrenal e/ou choque séptico (iniciar hidrocortisona 50 mg EV 6/6h)</p>
+      <p style='padding-left: 15px'>-Anafilaxia</p>
+      <p style='padding-left: 15px'>-IAM</p>
+      <p style='padding-left: 15px'>-Embolia</p>
+      <p style='padding-left: 15px'>-Dissecção de aorta</p>
+      <p style='padding-left: 15px'>-Tamponamento cardíaco</p>
+      <p style='padding-left: 15px'>-Sangramentos ocultos</p>
+    </ion-item>
+  </ion-list>
+
+  <!--DOPAMINA-->
+  <ion-list *ngIf='droga == "dopamina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 5 mg/ml com 1 ou 10 ml<br><br>
+      <b>Dose beta-adrenérgica:</b> 5 a 10 mcg/kg/min<br><br>
+      <b>Dose alfa-adrenérgica</b> 10 a 20 mcg/kg/min<br><br>
+      <b>Dose máxima:</b> 20 mcg/kg/min
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>A dose beta aumenta a frequência cardíaca e o inotropismo. A dose alfa promove aumento da resistência vascular
+        e da pressão arterial. Doses acima destas não são recomendadas pois não mostram efeitos benéficos.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Bradicardia com hipotensão</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos Adversos</b>
+      <p style='padding-left: 15px'>-Maior chance de taquiarritmias e morte, se comparada à noradrenalina</p>
+    </ion-item>
+  </ion-list>
+
+  <!--DOBUTAMINA-->
+  <ion-list *ngIf='droga == "dobutamina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 12,5 mg/ml com 1 ou 20 ml<br><br>
+      <b>Dose:</b> 2 a 30 mcg/kg/min
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Titular dose a cada 2 a 5 minutos, com modificações de 2,5 mcg/kg/min. Sua ação é predominantemente
+        beta-adrenérgica, apresentando efeitos cronotrópico e inotrópico positivos, com discreta vasodilatação
+        sistêmica, facilitando assim o trabalho do VE.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Choque cardiogênico</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos Adversos</b>
+      <p style='padding-left: 15px'>-Pode piorar a hipotensão em pacientes com depleção de volume</p>
+      <p style='padding-left: 15px'>-Arritmias e aumento do consumo cardíaco de O2</p>
+    </ion-item>
+  </ion-list>
+
+  <!--ADRENALINA-->
+  <ion-list *ngIf='droga == "adrenalina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 1 mg/ml <br><br>
+      <b>Dose:</b> 1 a 30 mcg/min
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Titular dose ideal a cada 2 a 5 minutos.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Choque anafilático</p>
+      <p style='padding-left: 15px'>-Choque refratário à noradrenalina ("terapia de resgate")</p>
+      <p style='padding-left: 15px'>-Choque com bradicardia</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos Adversos</b>
+      <p style='padding-left: 15px'>-Droga vasoativa com maior incidência de arritmias.</p>
+    </ion-item>
+  </ion-list>
+
+  <!--VASOPRESSINA-->
+  <ion-list *ngIf='droga == "vasopressina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 20 UI <br><br>
+      <b>Dose:</b> 0,01 a 0,04 UI/min
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Redução da a necessidade de noradrenalina</p>
+      <p style='padding-left: 15px'>-Choque refratário a adrenalina ou hidrocortisona (principalmente o séptico)</p>
+      <p style='padding-left: 15px'>-Pode ser útil nos pacientes que apresentam taquiarritmias com a noradrenalina</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos Adversos</b>
+      <p style='padding-left: 15px'>-Bradicardia</p>
+      <p style='padding-left: 15px'>-Isquemia de órgãos e extremidades</p>
+    </ion-item>
+  </ion-list>
+
+  <!------------------------------------------------------------------------------------>
+  <!------------------------------------- HIPOTENSORES ----------------------------------->
+  <!------------------------------------------------------------------------------------>
+
+  <!--NITROPRUSSIATO-->
+  <ion-list *ngIf='droga == "nitroprussiato"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 25 mg/ml <br><br>
+      <b>Dose:</b> 0,3 a 10 mcg/kg/min <br><br>
+      <b>Duração:</b> 3 a 5 minutos
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>Vasodilatador direto arterial e venoso. Aumentar a dose a cada 3 a 5 min até conseguir a meta ou o paciente
+        apresentar indícios de hipoperfusão, como hipersonolência.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-AVE isquêmico</p>
+      <p style='padding-left: 15px'>-Hemorragia intraparenquimatosa</p>
+      <p style='padding-left: 15px'>-Hemorragia subaracnoidea</p>
+      <p style='padding-left: 15px'>-Paralisia flácida aguda</p>
+      <p style='padding-left: 15px'>-Encefalopatia hipertensiva</p>
+      <p style='padding-left: 15px'>-Hipertensão com retinopatia avançada</p>
+      <p style='padding-left: 15px'>-Síndrome aórtica aguda (após o beta-bloqueador)</p>
+      <p style='padding-left: 15px'>-Edema pulmonar agudo cardiogênico com hipertensão</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações (relativas)</b>
+      <p style='padding-left: 15px'>-Doença renal crônica</p>
+      <p style='padding-left: 15px'>-Insuficiência hepática</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos adversos</b>
+      <p style='padding-left: 15px'>-Toxicidade por cianeto (raro)</p>
+    </ion-item>
+  </ion-list>
+
+  <!--NITROGLICERINA-->
+  <ion-list *ngIf='droga == "nitroglicerina"'>
+    <ion-item text-wrap>
+      <b>Apresentação:</b> 5 mg/ml <br><br>
+      <b>Dose:</b> 5 a 200 mcg/kg/min <br><br>
+      <b>Duração:</b> 3 a 10 min
+    </ion-item>
+    <ion-item text-wrap text-justify>
+      <p>É um vasodilatador direto venoso. Reduz a pré-carga, mas não é tão eficaz quanto o nitroprussiato para baixar
+        a PA. Recomenda-se titular a dose em 5-10 mcg/min a cada 3 a 5 min até resposta desejada.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Indicações</b>
+      <p style='padding-left: 15px'>-Síndrome coronariana aguda com dor precordial em curso</p>
+      <p style='padding-left: 15px'>-hipertensão arterial persistente</p>
+      <p style='padding-left: 15px'>-IC aguda descompensada associada</p>
+      <p style='padding-left: 15px'>-SCA associada a vasoespasmo (Prinzmetal ou cocaína)</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Contraindicações (relativas)</b>
+      <p style='padding-left: 15px'>-Uso recente de sildenafil (< 24h) ou tadalafil (< 48h)</p>
+      <p style='padding-left: 15px'>-Infarto do VD</p>
+      <p style='padding-left: 15px'>-Hipovolemia</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <b style='color:red'>Efeitos adversos</b>
+      <p style='padding-left: 15px'>-Cefaleia</p>
+      <p style='padding-left: 15px'>-Náuseas e vômitos</p>
+      <p style='padding-left: 15px'>-Tolerância</p>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

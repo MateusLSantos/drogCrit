@@ -1,14 +1,1580 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Ionic Blank
+    <ion-title text-center>
+      Drogas Críticas
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content padding-left padding-right padding-bottom>
+  <form>
+    <ion-row>
+      <ion-col col-6>
+        <ion-item>
+          <ion-label floating>Peso (kg)</ion-label>
+          <ion-input type="number" [(ngModel)]="peso" name="peso" text-right></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-6>
+        <ion-item>
+          <ion-label floating>Altura (cm)</ion-label>
+          <ion-input type="number" [(ngModel)]="altura" name="altura" text-right></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <hr>
+    <ion-row>
+      <ion-label text-right>Homem</ion-label>
+      <ion-toggle [(ngModel)]='mulher' name='sexo'></ion-toggle>
+      <ion-label>Mulher</ion-label>
+    </ion-row>
+  </form>
+
+  <!-- PÁGINA INICIAL -->
+
+  <div style="height:5%" *ngIf='pagInicial'></div>
+  <button ion-button block large *ngIf='pagInicial' (click)="iot()">
+    Intubação Seq. Rápida
+  </button>
+  <div style="height:1%" *ngIf='pagInicial'></div>
+  <button style='background-color:blueviolet' ion-button block large *ngIf='pagInicial' (click)="sedacao()">
+    Sedação
+  </button>
+  <div style="height:1%" *ngIf='pagInicial'></div>
+  <button style='background-color:darkslateblue' ion-button block large *ngIf='pagInicial' (click)="dva()">
+    Drogas Vasoativas
+  </button>
+  <div style="height:1%" *ngIf='pagInicial'></div>
+  <button style='background-color:#091540' ion-button block large *ngIf='pagInicial' (click)="antidotos()">
+    Antídotos
+  </button>
+  <div style="height:10%" *ngIf='pagInicial'></div>
+  <button style='background-color:#aaa22b' ion-button block large *ngIf='pagInicial' (click)="calcRetro('blank')">
+    Cálculo Retrógrado
+  </button>
+
+  <!-- FAB -->
+
+  <ion-fab right bottom *ngIf='!pagInicial'>
+    <button ion-fab color="primary" (click)="turnBack()">
+      <ion-icon name="arrow-round-back"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <!--Peso ideal: altura-100 ou altura-105 -->
+  <!--Peso magro: (altura-100) + 0.3*(peso-(altura-100))-->
+
+  <!-- -------------------------INTUBAÇÃO DE SEQUÊNCIA RÁPIDA----------------------------- -->
+
+  <!--Pré medicação-->
+  <!-- Fentanil -->
+  <h4 *ngIf='showIot'>Pré-medicação</h4>
+  <button ion-button block *ngIf='showIot && !showLidocaina' (click)="iotCalc('fentanil')">
+    Fentanil 50 mcg/ml
+  </button>
+  <ion-row *ngIf='showIot && showFentanil'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showFentanil && !mulher'>
+    <!--HOMEM-->
+    <ion-col col-4>
+      <b style='color:red'>{{(( (altura-100) + 0.3*(peso - (altura-100)) )*3).toFixed(2)}}</b> mcg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((( (altura-100) + 0.3*(peso - (altura-100)) )*3)/50).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showFentanil && mulher'>
+    <!--MULHER-->
+    <ion-col col-4>
+      <b style='color:red'>{{(( (altura-105) + 0.3*(peso - (altura-105)) )*3).toFixed(2)}}</b> mcg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((( (altura-105) + 0.3*(peso - (altura-105)) )*3)/50).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showFentanil' style='height:5px'></div>
+  <button *ngIf='showIot && showFentanil' ion-button small outline (click)='info("fentanil")'>Mais informações</button>
+
+  <div *ngIf='showIot' style='height:1px'></div>
+  <!--Lidocaína-->
+  <button ion-button block *ngIf='showIot && !showFentanil' (click)="iotCalc('lidocaina')">
+    Lidocaína 20 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showLidocaina'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showLidocaina && !mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)*1.5/20).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showLidocaina && mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)*1.5/20).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showLidocaina' style='height:5px'></div>
+  <button *ngIf='showIot && showLidocaina' ion-button small outline (click)='info("lidocaina")'>Mais informações</button>
+
+
+  <!------------------------- Hipnóticos ------------------------>
+  <!-- Etomidato -->
+  <h4 *ngIf='showIot'>Hipnóticos <span style='font-size: 14px;font-style: italic; color:dimgray'>(3 minutos após
+      pré-medicação)</span></h4>
+  <button ion-button block *ngIf='showIot && !showQuetamina && !showPropofol && !showMidazolam' (click)="iotCalc('etomidato')"
+    style='background-color:blueviolet'>
+    Etomidato 2 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showEtomidato'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showEtomidato && !mulher'>
+    <!--HOMEM-->
+    <ion-col col-4>
+      <b style='color:red'>{{(((altura-100) + 0.3*(peso - (altura-100)))*0.3).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((((altura-100) + 0.3*(peso - (altura-100)))*0.3)/2).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showEtomidato && mulher'>
+    <!--MULHER-->
+    <ion-col col-4>
+      <b style='color:red'>{{(((altura-105) + 0.3*(peso - (altura-105)))*0.3).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((((altura-105) + 0.3*(peso - (altura-105)))*0.3)/2).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showEtomidato' style='height:5px'></div>
+  <button *ngIf='showIot && showEtomidato' ion-button small outline (click)='info("etomidato")'>Mais informações</button>
+
+
+  <div *ngIf='showIot' style='height:1px'></div>
+  <!-- Quetamina -->
+  <button ion-button style='background-color:blueviolet' block *ngIf='showIot && !showEtomidato && !showPropofol && !showMidazolam'
+    (click)="iotCalc('quetamina')">
+    Quetamina 50 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showQuetamina'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showQuetamina && !mulher'>
+    <!--HOMEM-->
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)*1.5/50).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showIot && showQuetamina && mulher'>
+    <!--MULHER-->
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)*1.5/50).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showQuetamina' style='height:5px'></div>
+  <button *ngIf='showIot && showQuetamina' ion-button small outline (click)='info("quetamina")'>Mais informações</button>
+
+
+  <div *ngIf='showIot' style='height:1px'></div>
+  <!-- Propofol -->
+  <button ion-button style='background-color:blueviolet' block *ngIf='showIot && !showEtomidato && !showQuetamina && !showMidazolam'
+    (click)="iotCalc('propofol')">
+    Propofol 10 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showPropofol'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showPropofol && !mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{(( (altura-100) + 0.3*(peso - (altura-100)) )*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((( (altura-100) + 0.3*(peso - (altura-100)) )*1.5)/10).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showIot && showPropofol && mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{(( (altura-105) + 0.3*(peso - (altura-105)) )*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((( (altura-105) + 0.3*(peso - (altura-105)) )*1.5)/10).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showPropofol' style='height:5px'></div>
+  <button *ngIf='showIot && showPropofol' ion-button small outline (click)='info("propofol")'>Mais informações</button>
+
+
+  <div *ngIf='showIot' style='height:1px'></div>
+  <!-- Midazolam -->
+  <button ion-button style='background-color:blueviolet' block *ngIf='showIot && !showEtomidato && !showPropofol && !showQuetamina'
+    (click)="iotCalc('midazolam')">
+    Midazolam 5 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showMidazolam'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showMidazolam && !mulher'>
+    <!--HOMEM-->
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)*0.2).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(((altura-100)*0.2)/5).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showMidazolam && !mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)*0.3).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(((altura-100)*0.3)/5).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showIot && showMidazolam && mulher'>
+    <!--MULHER-->
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)*0.2).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(((altura-105)*0.2)/5).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showMidazolam && mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)*0.3).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(((altura-105)*0.3)/5).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showMidazolam' style='height:5px'></div>
+  <button *ngIf='showIot && showMidazolam' ion-button small outline (click)='info("midazolam")'>Mais informações</button>
+
+  <!------------------------- Bloqueadores Neuromusculares ----------------------------->
+  <!-- Succinilcolina -->
+  <h4 *ngIf='showIot'>Bloqueadores Neuromusculares<span style='font-size: 14px;font-style: italic; color:dimgray'>
+      (após
+      hipnose)
+    </span></h4>
+  <button ion-button style='background-color:darkslateblue' block *ngIf='showIot  && !showRocuronio' (click)="iotCalc('succinilcolina')">
+    Succinilcolina 10 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showSuccinilcolina'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showSuccinilcolina'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*1.5).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*1.5/10).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showSuccinilcolina' style='height:5px'></div>
+  <button *ngIf='showIot && showSuccinilcolina' ion-button small outline (click)='info("succinilcolina")'>Mais
+    informações</button>
+
+
+  <div *ngIf='showIot' style='height:1px'></div>
+  <!-- Rocurônio -->
+  <button ion-button block style='background-color:darkslateblue' *ngIf='showIot  && !showSuccinilcolina' (click)="iotCalc('rocuronio')">
+    Rocurônio 10 mg/ml
+  </button>
+  <ion-row *ngIf='showIot && showRocuronio'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Quantidade</b>
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showRocuronio && !mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{(altura-100).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-100)/10).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showIot && showRocuronio && mulher'>
+    <ion-col col-4>
+      <b style='color:red'>{{(altura-105).toFixed(2)}}</b> mg
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((altura-105)/10).toFixed(2)}}</b> ml
+    </ion-col>
+    <ion-col col-4>
+
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showIot && showRocuronio' style='height:5px'></div>
+  <button *ngIf='showIot && showRocuronio' ion-button small outline (click)='info("rocuronio")'>Mais informações</button>
+
+
+  <!------------------------------------------------- SEDAÇÃO ------------------------------------------------------>
+  <!-- Fentanil -->
+  <h4 *ngIf='showSed'>Sedação pós-intubação</h4>
+  <button ion-button block *ngIf='showSed && !showPropofol && !showMidazolam' (click)="iotCalc('fentanil')">
+    Fentanil 50 mcg/ml
+  </button>
+
+  <ion-row *ngIf='showSed && showFentanil'>
+    <p padding-right><b>Diluição:</b> 40 ml + 160 ml SF 0,9%<br>
+      <b>Concentração:</b> 10 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showFentanil'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showSed && showFentanil'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.03).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.03/10*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.03/10*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showSed && showFentanil'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showFentanil'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.05).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.05/10*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.05/10*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showSed && showFentanil' style='height:2%'></div>
+  <ion-row *ngIf='showSed && showFentanil'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block ion-button small outline (click)='info("fentanil")'>Mais
+        informações</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showSed && showFentanil'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('fentanil')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+  <div *ngIf='showSed' style='height:1px'></div>
+
+
+  <!-- Propofol -->
+  <button ion-button block *ngIf='showSed && !showFentanil && !showMidazolam' (click)="iotCalc('propofol')">
+    Propofol 10 mg/ml
+  </button>
+
+  <ion-row *ngIf='showSed && showPropofol'>
+    <p padding-right><b>Diluição:</b> 60 ml (sem diluição)<br>
+      <b>Concentração:</b> 10 mg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showPropofol'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showSed && showPropofol'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.005).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.005/10*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.005/10*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showSed && showPropofol'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showPropofol'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.080).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.080/10*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.080/10*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showSed && showPropofol' style='height:2%'></div>
+  <ion-row *ngIf='showSed && showPropofol'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block ion-button small outline (click)='info("propofol")'>Mais
+        informações</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showSed && showPropofol'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('propofol')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showSed' style='height:1px'></div>
+
+  <!-- Midazolam -->
+  <button ion-button block *ngIf='showSed && !showFentanil && !showPropofol' (click)="iotCalc('midazolam')">
+    Midazolam 5 mg/ml
+  </button>
+
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <p padding-right><b>Diluição:</b> 30 ml + 120 ml SG 5% <br>
+      <b>Concentração:</b> 1 mg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.05).toFixed(2)}}</b> mg/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.05).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.05)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1).toFixed(2)}}</b> mg/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.1)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <hr *ngIf='showSed && showMidazolam'>
+
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <p padding-right><b>Diluição:</b> 20 ml + 80 ml SF 0,9%<br>
+      <b>Concentração:</b> 1 mg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.03).toFixed(2)}}</b> mg/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.03).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.03)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.3).toFixed(2)}}</b> mg/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.3).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.3)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showSed && showMidazolam' style='height:2%'></div>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block ion-button small outline (click)='info("midazolam")'>Mais
+        informações</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showSed && showMidazolam'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('midazolam')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+
+  <!-------------------------------------------- DROGAS VASOATIVAS ------------------------------------------------->
+  <!-- Noradrenalina -->
+  <h4 *ngIf='showDva'>Drogas Vasoativas</h4>
+  <button ion-button block *ngIf='showDva && !showDobutamina && !showDopamina && !showAdrenalina && !showVasopressina && !showNitroprussiato && !showNitroglicerina'
+    (click)="dvaCalc('noradrenalina')" style='background-color:blueviolet'>
+    Noradrenalina 1 mg/ml
+  </button>
+  <ion-row *ngIf='showDva && showNoradrenalina'>
+    <ion-col col-7>
+      <p><b>Dose:</b> 0,1 a 2 mcg/kg/min</p>
+    </ion-col>
+    <ion-col col-5>
+      <button button-block ion-button small outline (click)='info("noradrenalina")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showNoradrenalina && !showNoradrenalina1 && !showNoradrenalina2'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6 text-center>
+      <h4>Selecione uma diluição</h4>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <button ion-button block *ngIf='showDva && showNoradrenalina && !showNoradrenalina2' (click)='showNoradrenalina1 = !showNoradrenalina1'>
+    16 ml + Glicose 5% 234 ml
+  </button>
+  <div style='height: 2px' *ngIf='showDva && showNoradrenalina'></div>
+  <button ion-button block *ngIf='showDva && showNoradrenalina && !showNoradrenalina1' (click)='showNoradrenalina2 = !showNoradrenalina2'>
+    20 ml + Glicose 5% 80 ml
+  </button>
+
+  <!--Primeira diluição-->
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina1'>
+    <p><b>Concentração:</b> 64 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina1'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina1'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1/64*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.1/64*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina1'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina1'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*2).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*2/64*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*2/64*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <!-- Segunda Diluição -->
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina2'>
+    <p><b>Concentração:</b> 200 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina2'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina2'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1/200*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.1/200*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina2'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNoradrenalina && showNoradrenalina2'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*2).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*2/200*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*2/200*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showNoradrenalina' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showNoradrenalina'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('noradrenalina')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+  <div *ngIf='showDva' style='height:1px'></div>
+
+  <!-- Dobutamina -->
+  <button ion-button block *ngIf='showDva && !showNoradrenalina && !showDopamina && !showAdrenalina && !showVasopressina && !showNitroprussiato && !showNitroglicerina'
+    (click)="dvaCalc('dobutamina')" style='background-color:blueviolet'>
+    Dobutamina 12,5 mg/ml
+  </button>
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <ion-col col-7>
+      <p><b>Dose:</b> 2,5 a 20 mcg/kg/min</p>
+    </ion-col>
+    <ion-col col-5>
+      <button button-block ion-button small outline (click)='info("dobutamina")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <p padding-right><b>Diluição:</b> 80 ml + 170 ml SG 5% <br>
+      <b>Concentração:</b> 4 mg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*2.5).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*2.5/4000*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*2.5/4000*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*20).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*20/4000*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*20/4000*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showDobutamina' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showDobutamina'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('dobutamina')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva' style='height:1px'></div>
+
+
+  <!-- Dopamina -->
+  <button ion-button block *ngIf='showDva && !showNoradrenalina && !showDobutamina && !showAdrenalina && !showVasopressina && !showNitroprussiato && !showNitroglicerina'
+    (click)="dvaCalc('dopamina')" style='background-color:blueviolet'>
+    Dopamina 5 mg/ml
+  </button>
+  <ion-row *ngIf='showDva && showDopamina'>
+    <ion-col col-7>
+      <p><b>Dose:</b> 5 a 20 mcg/kg/min</p>
+    </ion-col>
+    <ion-col col-5>
+      <button button-block ion-button small outline (click)='info("dopamina")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showDopamina'>
+    <p padding-right><b>Diluição:</b> 50 ml + 200 ml SG 5% <br>
+      <b>Concentração:</b> 1 mg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDopamina'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDopamina'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*5).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*5/1000*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*5/1000*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDopamina'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showDopamina'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*20).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*20/1000*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*20/1000*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showDopamina' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showDopamina'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('dopamina')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+
+  <div *ngIf='showDva' style='height:1px'></div>
+
+  <!-- Adrenalina -->
+  <button ion-button block *ngIf='showDva && !showDobutamina && !showDopamina && !showNoradrenalina && !showVasopressina && !showNitroprussiato && !showNitroglicerina'
+    (click)="dvaCalc('adrenalina')" style='background-color:blueviolet'>
+    Adrenalina 1 mg/ml
+  </button>
+  <ion-row *ngIf='showDva && showAdrenalina'>
+    <ion-col col-8>
+      <p><b>Dose:</b> 0,005 a 0,1 mcg/kg/min</p>
+    </ion-col>
+    <ion-col col-4>
+      <button button-block ion-button small outline (click)='info("adrenalina")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showAdrenalina && !showAdrenalina1 && !showAdrenalina2'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6 text-center>
+      <h4>Selecione uma diluição</h4>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <button ion-button block *ngIf='showDva && showAdrenalina && !showAdrenalina2' (click)='showAdrenalina1 = !showAdrenalina1'>
+    2 ml + Glicose 5% 250 ml
+  </button>
+  <div style='height: 2px' *ngIf='showDva && showAdrenalina'></div>
+  <button ion-button block *ngIf='showDva && showAdrenalina && !showAdrenalina1' (click)='showAdrenalina2 = !showAdrenalina2'>
+    7 ml + Glicose 5% 100 ml
+  </button>
+
+  <!--Primeira diluição-->
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina1'>
+    <p><b>Concentração:</b> 8 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina1'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina1'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.005).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.005/8*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.005/8*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina1'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina1'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.1/8*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.1/8*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <!-- Segunda Diluição -->
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina2'>
+    <p><b>Concentração:</b> 65,42 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina2'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina2'>
+    <ion-col col-4>
+      <b style='color:red'>2</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>1.83</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>0.6</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina2'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showAdrenalina && showAdrenalina2'>
+    <ion-col col-4>
+      <b style='color:red'>10</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>9.17</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>3.06</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showAdrenalina' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showAdrenalina'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('adrenalina')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva' style='height:1px'></div>
+
+  <!-- Vasopressina -->
+  <button ion-button block *ngIf='showDva && !showNoradrenalina && !showDobutamina && !showAdrenalina && !showDopamina && !showNitroprussiato && !showNitroglicerina'
+    (click)="dvaCalc('vasopressina')" style='background-color:blueviolet'>
+    Vasopressina 20 U/ml
+  </button>
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <ion-col col-7>
+      <p><b>Dose:</b> 5 a 20 mcg/kg/min</p>
+    </ion-col>
+    <ion-col col-5>
+      <button button-block ion-button small outline (click)='info("vasopressina")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <p padding-right><b>Diluição:</b> 1 ml + 200 ml SG 5% <br>
+      <b>Concentração:</b> 0,1 U/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <ion-col col-4>
+      <b style='color:red'>0.01</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>6</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>2</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <ion-col col-4>
+      <b style='color:red'>0.03</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>18</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>6</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showVasopressina' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showVasopressina'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('vasopressina')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva' style='height:1px'></div>
+
+  <!-- Nitroprussiato -->
+  <button ion-button block *ngIf='showDva && !showNoradrenalina && !showDobutamina && !showAdrenalina && !showVasopressina && !showDopamina && !showNitroglicerina'
+    (click)="dvaCalc('nitroprussiato')" style='background-color:darkslateblue'>
+    Nitroprussiato 25 mg/ml
+  </button>
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <ion-col col-7>
+      <p><b>Dose:</b> 0.3 a 10 mcg/kg/min</p>
+    </ion-col>
+    <ion-col col-5>
+      <button button-block ion-button small outline (click)='info("nitroprussiato")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <p padding-right><b>Diluição:</b> 2 ml + 248 ml SG 5% <br>
+      <b>Concentração:</b> 200 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.3).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*0.3/200*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*0.3/200*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*10).toFixed(2)}}</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{(peso*10/200*60).toFixed(2)}}</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>{{((peso*10/200*60)*20/60).toFixed(2)}}</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showNitroprussiato' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showNitroprussiato'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('nitroprussiato')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva' style='height:1px'></div>
+
+  <!-- Nitroglicerina -->
+  <button ion-button block *ngIf='showDva && !showDobutamina && !showDopamina && !showNoradrenalina && !showVasopressina && !showNitroprussiato && !showAdrenalina'
+    (click)="dvaCalc('nitroglicerina')" style='background-color:darkslateblue'>
+    Nitroglicerina 5 mg/ml
+  </button>
+  <ion-row *ngIf='showDva && showNitroglicerina'>
+    <ion-col col-7>
+      <p><b>Dose:</b> 5 a 200 mcg/min</p>
+    </ion-col>
+    <ion-col col-5>
+      <button button-block ion-button small outline (click)='info("nitroglicerina")'>Informações</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf='showDva && showNitroglicerina && !showNitroglicerina1 && !showNitroglicerina2'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6 text-center>
+      <h4>Selecione uma diluição</h4>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+
+  <button ion-button block *ngIf='showDva && showNitroglicerina && !showNitroglicerina2' (click)='showNitroglicerina1 = !showNitroglicerina1'>
+    10 ml + Glicose 5% 240 ml
+  </button>
+  <div style='height: 2px' *ngIf='showDva && showNitroglicerina'></div>
+  <button ion-button block *ngIf='showDva && showNitroglicerina && !showNitroglicerina1' (click)='showNitroglicerina2 = !showNitroglicerina2'>
+    5 ml + Glicose 5% 245 ml
+  </button>
+
+  <!--Primeira diluição-->
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina1'>
+    <p><b>Concentração:</b> 200 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina1'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina1'>
+    <ion-col col-4>
+      <b style='color:red'>5</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>1.5</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>0.5</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina1'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina1'>
+    <ion-col col-4>
+      <b style='color:red'>200</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>60</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>20</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <!-- Segunda Diluição -->
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina2'>
+    <p><b>Concentração:</b> 100 mcg/ml</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina2'>
+    <ion-col col-4>
+      <b>Dose</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Velocidade</b>
+    </ion-col>
+    <ion-col col-4>
+      <b>Gotejamento</b>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina2'>
+    <ion-col col-4>
+      <b style='color:red'>5</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>3</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>1</b> gotas/min
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina2'>
+    <p padding-left>a</p>
+  </ion-row>
+  <ion-row *ngIf='showDva && showNitroglicerina && showNitroglicerina2'>
+    <ion-col col-4>
+      <b style='color:red'>200</b> mcg/min
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>120</b> ml/h
+    </ion-col>
+    <ion-col col-4>
+      <b style='color:red'>40</b> gotas/min
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf='showDva && showNitroglicerina' style='height:3%'></div>
+  <ion-row *ngIf='showDva && showNitroglicerina'>
+    <ion-col col-3>
+    </ion-col>
+    <ion-col col-6>
+      <button button-block color='yellow' ion-button small outline (click)="calcRetro('nitroglicerina')">Cálc.
+        Retrógrado</button>
+    </ion-col>
+    <ion-col col-3>
+    </ion-col>
+  </ion-row>
+  <!------------------------------------------------ ANTÍDOTOS ----------------------------------------------------->
+
+  <!-- Flumazenil -->
+  <button ion-button block *ngIf='showAnt && !showNaloxone && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showGlucagon && !showAtropina'
+    (click)="antCalc('flumazenil')" style='background-color:darkslateblue'>
+    Flumazenil
+  </button>
+  <ion-list *ngIf='showAnt && showFlumazenil'>
+    <ion-item>
+      <p><b>Alvo:</b> Benzodiazepínicos</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Dose:</b> 0,2 mcg a cada 30 segundos</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Dose máxima:</b> 3 mg</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b style='color:red'>Atenção:</b> evitar uso rotineiro devido ao risco de rebote com taquicardia, hipertensão
+        e convulsões
+        refratárias a BDZ. Nestes casos, usar <b>Propofol ou barbitúricos</b>.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>Mecanismo:</b> Antagonista competitivo dos receptores GABA – Não facilita a eliminação dos BDZ e pode haver
+        ressedação após o término do efeito, em pacientes com acúmulo de BDZ.</p>
+    </ion-item>
+  </ion-list>
+
+  <!-- Naloxone -->
+  <button ion-button block *ngIf='showAnt && !showFlumazenil && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showGlucagon && !showAtropina'
+    (click)="antCalc('naloxone')" style='background-color:darkslateblue'>
+    Naloxone 0,4 mg/ml
+  </button>
+  <ion-list *ngIf='showAnt && showNaloxone'>
+    <ion-item>
+      <p><b>Alvo:</b> Opioides</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>Dose:</b> 0,4 a 2 mg EV a cada 2-3 min, até resposta ou dose máxima de 10mg</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p>Admite-se dose de 0,4mg por via IM, ou endotraqueal.</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b style='color:red'>Atenção:</b> Não costuma provocar efeitos adversos, mas a reversão abrupta em pacientes
+        com uso crônico de opioides pode desencadear convulsões, arritmias, agitação profunda, hipertensão e edema
+        pulmonar</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>Mecanismo:</b> Antagonista competitivo de receptores opiáceos. Início de ação em 2 minutos e duração de 30
+        a 120 minutos. </p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p>Considere usar naloxone em caso de RNC de origem indeterminada com pupilas mióticas.</p>
+    </ion-item>
+  </ion-list>
+
+
+  <!-- Protamina -->
+  <button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showGlucagon && !showAtropina'
+    (click)="antCalc('protamina')" style='background-color:darkslateblue'>
+    Protamina
+  </button>
+  <ion-list *ngIf='showAnt && showProtamina'>
+    <ion-item>
+      <p><b>Alvo:</b> Heparinas não fracionada (HNF) e de baixo peso molecular (HBPM)</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>HNF:</b> 1 a 1,5 mg por 100 UI de heparina, até dose máxima de 50 mg (reversão de cerca de 90 a 100%)</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>HBPM:</b> 1 mg para cada 100 UI nas primeiras 8h de administração, com segunda dose de 0,5 mg para 100 UI
+        pode ser repetida. Considerar Plasma Fresco Congelado para sangramentos significativos.</p>
+    </ion-item>
+  </ion-list>
+
+  <!-- Gluconato de Cálcio -->
+  <button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showGlucagon && !showAtropina'
+    (click)="antCalc('gluconato')" style='background-color:darkslateblue'>
+    Gluconato de Cálcio 10%
+  </button>
+  <ion-list *ngIf='showAnt && showGluconato'>
+    <ion-item text-wrap>
+      <p><b>Alvo:</b> Hipercalemia, Bloqueadores de canais de cálcio (BCC) e Sulfato de Magnésio (MgSO4)</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Apresentação:</b> 10% (10g em 100 ml)</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>Dose de ataque:</b> Diluir 10 (1g) a 30ml (3g) de gluconato de cálcio em 100ml de SF 0,9% ou glicose 5% e infundir em 2 a 5 minutos</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>BCC:</b> repetir ataque em até 4x seguidas, manutenção em 0,2ml/kg/h</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p><b>Hipercalemia:</b> repetir ECG após a infusão e fazer nova dose caso as alterações persistam</p>
+    </ion-item>
+    <ion-item text-wrap>
+      <p>Efeito se inicia em 1 a 3 min e tem duração de 30 a 60 minutos, protegendo o miocárdio de arritmias mais graves
+        (mas não altera concentração sérica de potássio)</p>
+    </ion-item>
+  </ion-list>
+
+<!-- Acetilcisteína -->
+<button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showGluconato && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showGlucagon && !showAtropina'
+(click)="antCalc('acetilcisteina')" style='background-color:darkslateblue'>
+Acetilcisteína 100 mg/ml
+</button>
+<ion-list *ngIf='showAnt && showAcetilcisteina'>
+<ion-item text-wrap>
+  <p><b>Alvo:</b> Paracetamol </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose EV:</b> 150mg/kg (<b style='color:red'>{{peso*150}} mg, ou {{peso*150/100}} ml</b>) + Glicose 5% em 15 min, seguida de 50mg/kg (<b style='color:red'>{{peso*50}} mg, ou {{peso*50/100}} ml</b>) em 4h, depois 100mg de 6/6h, mantida até INR < 2,0 </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose VO:</b> 140mg/kg (<b style='color:red'>{{peso*140}} mg</b>), ou associar a Glicose 5% para passagem em SNG, e posteriormente 70mg/kg (<b style='color:red'>{{peso*70}} mg</b>) de 4/4h até total de 17 doses</p>
+</ion-item>
+</ion-list>
+
+<!-- Vitamina K -->
+<button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaB6 && !showFisiostigmina && !showGlucagon && !showAtropina'
+(click)="antCalc('vitaminaK')" style='background-color:darkslateblue'>
+Vitamina K (fitomenadiona) 
+</button>
+<ion-list *ngIf='showAnt && showVitaminaK'>
+<ion-item text-wrap>
+  <p><b>Alvo:</b> Anticoagulantes antagonistas da vitamina K (ex: Varfarina) </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Vias de uso:</b> Dar preferência à VO e EV (a apresentação EV pode ser utilizada por VO, e diluída em água filtrada 1mg:1ml). Evitar vias SC ou IM pelo risco de hematomas.</p>
+</ion-item>
+<ion-item text-wrap>
+  <p> Para reduzir o risco de reação anafilactoide por via EV, pode-se diluir em SF 50 ml e infundir em 20 minutos</p>
+</ion-item>
+<ion-item text-wrap>
+  <p> Para que valores do INR entre 6,0 e 10,0 caiam para 4,0, em geral são necessários 2,5 dias de suspensão da varfarina. Com o uso de Vit K na VO, esse tempo cai para 1,4 dia, e 24h por via EV</p>
+</ion-item>
+<ion-item text-wrap>
+  <p> Considerar associar Plasma Fresco Congelado 15 a 30 ml/kg/dia</p>
+</ion-item>
+</ion-list>
+
+
+<!-- Vitamina B6 -->
+<button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showFisiostigmina && !showGlucagon && !showAtropina'
+(click)="antCalc('vitaminaB6')" style='background-color:darkslateblue'>
+Vitamina B6 (Piridoxina)
+</button>
+<ion-list *ngIf='showAnt && showVitaminaB6'>
+<ion-item text-wrap>
+  <p><b>Alvo:</b> Isoniazida </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose:</b> 5g EV, repetir em 30 minutos</p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Efeitos adversos:</b> náuseas, aumento das aminotransferases, neuropatia, parestesias</p>
+</ion-item>
+</ion-list>
+
+<!-- Fisiostigmina -->
+<button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showGlucagon && !showAtropina'
+(click)="antCalc('fisiostigmina')" style='background-color:darkslateblue'>
+Fisiostigmina
+</button>
+<ion-list *ngIf='showAnt && showFisiostigmina'>
+<ion-item text-wrap>
+  <p><b>Alvo:</b> Anticolinérgicos </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose:</b> IM ou IV: 0,5 a 2,0 mg e repetir de 20/20min até que haja resposta ou reações adversas. Repetir 1 a 4 mg a cada 30-60 minutos se houver recorrência de sintomas potencialmente letais</p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Efeitos adversos:</b> Assitolia, bradicardia, palpitações, diarreia, espasmos, lacrimejamento, miose, broncoespasmo, alucinações, convulsões, nervorsismo</p>
+</ion-item>
+</ion-list>
+
+<!-- Glucagon -->
+<button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showAtropina'
+(click)="antCalc('glucagon')" style='background-color:darkslateblue'>
+Glucagon
+</button>
+<ion-list *ngIf='showAnt && showGlucagon'>
+<ion-item text-wrap>
+  <p><b>Alvo:</b> Betabloqueadores </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose de ataque:</b> 5mg EV (pode ser repetido)</p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose de manutenção:</b> 1-5mg EV/h</p>
+</ion-item>
+</ion-list>
+
+<!-- Atropina -->
+<button ion-button block *ngIf='showAnt && !showFlumazenil && !showNaloxone && !showProtamina && !showGluconato && !showAcetilcisteina && !showVitaminaK && !showVitaminaB6 && !showFisiostigmina && !showGlucagon'
+(click)="antCalc('atropina')" style='background-color:darkslateblue'>
+Atropina
+</button>
+<ion-list *ngIf='showAnt && showAtropina'>
+<ion-item text-wrap>
+  <p><b>Alvo:</b> Organofosforados </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Apresentação:</b> ampolas com 1 ml a 0,25 ou 0,5 mg/ml </p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose - intoxicações leves:</b> 1 a 2 mg EV a cada 3 ou 5 minutos</p>
+</ion-item>
+<ion-item text-wrap>
+  <p><b>Dose - intoxicações graves:</b> 2 a 5 mg EV a cada 3 ou 5 minutos</p>
+</ion-item>
+</ion-list>
+
+
 </ion-content>

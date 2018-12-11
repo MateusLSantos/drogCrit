@@ -1,0 +1,75 @@
+<!--
+  Generated template for the CalculoRetrogradoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title text-center>Cálculo Retrógrado</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-fab right bottom>
+        <button ion-fab color="primary" (click)="turnBack()"><ion-icon name="arrow-round-back"></ion-icon></button>
+      </ion-fab>
+
+  <form>
+      <ion-item>
+          <ion-label>Peso (kg)</ion-label>
+          <ion-input [(ngModel)]='peso' name='peso' type='number'></ion-input>
+        </ion-item>
+    <ion-item>
+      <ion-label>Droga</ion-label>
+      <ion-select [(ngModel)]='droga' name='droga' class="selectorLargo" style="width: 60%">
+        <ion-option value='fentanil'>Fentanil 50 mcg/ml</ion-option>
+        <ion-option value='propofol'>Propofol 10 mg/ml</ion-option>
+        <ion-option value='midazolam'>Midazolam 5 mg/ml</ion-option>
+        <ion-option value='noradrenalina'>Noradrenalina 1 mg/ml</ion-option>
+        <ion-option value='dopamina'>Dopamina 5 mg/ml</ion-option>
+        <ion-option value='dobutamina'>Dobutamina 12,5 mg/ml</ion-option>
+        <ion-option value='adrenalina'>Adrenalina 1 mg/ml</ion-option>
+        <ion-option value='vasopressina'>Vasopressina 20 U/ml</ion-option>
+        <ion-option value='nitroprussiato'>Nitroprussiato 25 mg/ml</ion-option>
+        <ion-option value='nitroglicerina'>Nitroglicerina 5 mg/ml</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Quantidade de diluente (ml)</ion-label>
+      <ion-input [(ngModel)]='diluente' name='diluente' type='number'></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Quantidade da droga (ml)</ion-label>
+      <ion-input [(ngModel)]='quant' name='quant' type='number'></ion-input>
+    </ion-item>
+    <ion-item no-lines>
+      <ion-label>Vel. infusão (ml/h)*</ion-label>
+      <ion-input [(ngModel)]='velocidade' name='velocidade' type='number'></ion-input>
+    </ion-item>
+    <ion-item no-lines>
+      <p>*1 gota/min = 3 ml/h</p>
+    </ion-item>
+
+  </form>
+
+  <div style='height: 5%'></div>
+  <button ion-button block (click)='calc()' *ngIf='peso && droga && diluente && quant && velocidade'>Calcular</button>
+
+  <div style='height: 5%'></div>
+  <ion-list *ngIf='showResults'>
+    <ion-item text-wrap>
+      <b>Concentração:</b> {{conc}} <span *ngIf='droga != "vasopressina"'>mcg/ml</span><span *ngIf='droga == "vasopressina"'>U/ml</span>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Dose aplicada:</b> {{dose}} <span *ngIf='droga != "vasopressina" && droga != "nitroglicerina"'>mcg/kg/min</span><span *ngIf='droga == "vasopressina"'>U/min</span><span *ngIf='droga == "nitroglicerina"'>mcg/min</span>
+    </ion-item>
+    <ion-item text-wrap>
+      <b>Dose recomendada:</b> {{recommended[0]}} a {{recommended[1]}} <span *ngIf='droga != "vasopressina" && droga != "nitroglicerina"'>mcg/kg/min</span><span *ngIf='droga == "vasopressina"'>U/min</span><span *ngIf='droga == "nitroglicerina"'>mcg/min</span>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
